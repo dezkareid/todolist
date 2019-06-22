@@ -25,8 +25,10 @@ function createListItem (item) {
   const liElement = document.createElement('li')
   liElement.innerHTML = `
     <p>${item.text}</p>
-    <button>Eliminar</button>
+    <button data-task-id="${item.id}">Eliminar</button>
   `
+  const taskDeleteButton = document.querySelector('button')
+  taskDeleteButton.addEventListener('clic', onDeleteTaskClic)
   return liElement
 }
 
@@ -64,6 +66,25 @@ function addTaskToList (task) {
   const taskItem = createListItem(task)
   listElement.append(taskItem)
   document.getElementById('add-task-area').value = ''
+}
+
+function onDeleteTaskClic (event) {
+  const button = event.target
+  const { taskId } = button.dataset
+  deleteTask(taskId)
+    .then(() => button.parentNode)
+    .then(removeItemOfList)
+}
+function deleteTask (taskId) {
+  return fetch(`${BASE_URL}items/${taskId}`, {
+    method: 'DELETE'
+  })
+    .then(response => response.json())
+}
+
+function removeItemOfList (listItem) {
+  const list = listItem.parentNode
+  list.removeChild(listItem)
 }
 
 window.addEventListener('load', function () {
