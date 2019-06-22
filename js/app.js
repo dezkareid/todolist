@@ -30,6 +30,36 @@ function createListItem (item) {
   return liElement
 }
 
+function createTask () {
+  const text = document.getElementById('add-task-area').value
+  const task = { text }
+  saveTask(task)
+    .then(console.log)
+    .catch(console.error)
+}
+
+function saveTask (task) {
+  return fetch(`${BASE_URL}items`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(task)
+  })
+    .then(response => response.json())
+}
+
+function onSubmitFormAddTask (event) {
+  event.preventDefault()
+  createTask()
+}
+
+function suscribeToFormAddTaskSubmit () {
+  const form = document.getElementById('add-task')
+  form.addEventListener('submit', onSubmitFormAddTask)
+}
+
 window.addEventListener('load', function () {
   loadList()
+  suscribeToFormAddTaskSubmit()
 })
