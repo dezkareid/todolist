@@ -34,7 +34,7 @@ function createTask () {
   const text = document.getElementById('add-task-area').value
   const task = { text }
   saveTask(task)
-    .then(console.log)
+    .then(addTaskToList)
     .catch(console.error)
 }
 
@@ -57,6 +57,13 @@ function onSubmitFormAddTask (event) {
 function suscribeToFormAddTaskSubmit () {
   const form = document.getElementById('add-task')
   form.addEventListener('submit', onSubmitFormAddTask)
+}
+
+function addTaskToList (task) {
+  const listElement = document.getElementById('todo-list')
+  const taskItem = createListItem(task)
+  listElement.append(taskItem)
+  document.getElementById('add-task-area').value = ''
 }
 
 window.addEventListener('load', function () {
